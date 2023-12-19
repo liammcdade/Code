@@ -1,3 +1,6 @@
+import tkinter as tk
+from tkinter import ttk
+
 piece_772 = {
     "aqua": 6,
     "black": 289,
@@ -2379,35 +2382,45 @@ piece_87615 = {
 
 
 
-selected_piece = input("Enter the piece number: ")
-selected_color = input("Enter the color: ")
+def calculate_total():
+    selected_piece = piece_entry.get()
+    selected_color = color_entry.get()
 
-if selected_piece == "2038":
-    total = piece_2038.get(selected_color, 0)
-elif selected_piece == "2039":
-    total = piece_2039.get(selected_color, 0)
-elif selected_piece == "2335":
-    total = piece_2335.get(selected_color, 0)
-elif selected_piece == "2336":
-    total = piece_2336.get(selected_color, 0)
-elif selected_piece == "2338":
-    total = piece_2338.get(selected_color, 0)
-elif selected_piece == "2339":
-    total = piece_2339.get(selected_color, 0)
-elif selected_piece == "2340":
-    total = piece_2340.get(selected_color, 0)
-elif selected_piece == "2341":
-    total = piece_2341.get(selected_color, 0)
-elif selected_piece == "2342":
-    total = piece_2342.get(selected_color, 0)
-elif selected_piece == "3001":
-    total = piece_3001.get(selected_color, 0)
-elif selected_piece == "3005":
-    total = piece_3005.get(selected_color, 0)
+    if selected_piece in ["2038", "2039", "2335", "2336", "2338", "2339", "2340", "2341", "2342", "3001", "3005"]:
+        total = globals()[f"piece_{selected_piece}"].get(selected_color, 0)
+    else:
+        result_label.config(text=f"Piece {selected_piece} not found in inventory", foreground="red")
+        return
 
+    result_label.config(text=f"Total quantity of {selected_color} {selected_piece}: {total}", foreground="green")
 
-else:
-    print(f"Piece {selected_piece} not found in inventory")
+# Create the main window
+window = tk.Tk()
+window.title("Inventory Calculator")
+window.geometry("400x300")  # Set window size
 
-print(f"Total quantity of {selected_color} {selected_piece}: {total}")
+# Create and place widgets with some styling
+style = ttk.Style()
+style.configure("TButton", padding=10, font=('Helvetica', 12))
+style.configure("TLabel", padding=5, font=('Helvetica', 12))
 
+piece_label = ttk.Label(window, text="Enter the piece number:")
+piece_label.pack(pady=10)
+
+piece_entry = ttk.Entry(window, font=('Helvetica', 12))
+piece_entry.pack(pady=10)
+
+color_label = ttk.Label(window, text="Enter the color:")
+color_label.pack(pady=10)
+
+color_entry = ttk.Entry(window, font=('Helvetica', 12))
+color_entry.pack(pady=10)
+
+calculate_button = ttk.Button(window, text="Calculate Total", command=calculate_total)
+calculate_button.pack(pady=20)
+
+result_label = ttk.Label(window, text="", font=('Helvetica', 12))
+result_label.pack(pady=10)
+
+# Start the Tkinter event loop
+window.mainloop()
