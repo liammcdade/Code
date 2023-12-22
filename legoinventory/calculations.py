@@ -1,12 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-
-import tkinter as tk
-from tkinter import ttk
-
-file_path = "C:\\Users\\liam\\Documents\\code\\python\\legoinventory\\inventory_data.txt"
-
 def read_inventory_data(file_path):
     inventory_data = {}
     with open(file_path, "r") as file:
@@ -66,9 +60,24 @@ def lookup_color_total(color_entry, result_label, inventory_data):
 
     text_color = get_text_color(selected_color)
     result_label.config(text=f"Total quantity of {selected_color} for all pieces: {total}", foreground=text_color)
-    
-    text_color = get_text_color(selected_color)
-    result_label.config(text=f"Total quantity of {selected_color} for all pieces: {total}", foreground=text_color)
+
+
+def update_and_save_data(piece_number, color, new_quantity, inventory_data, file_path):
+    key = f"{piece_number}"
+    if key in inventory_data:
+        inventory_data[key][color.lower()] = new_quantity
+        save_inventory_data(inventory_data, file_path)
+        return True
+    else:
+        return False
+
+
+def save_inventory_data(inventory_data, file_path):
+    with open(file_path, "w") as file:
+        for piece_number, color_quantity in inventory_data.items():
+            for color, quantity in color_quantity.items():
+                file.write(f"{piece_number} {color} {quantity}\n")
+
 
 def get_text_color(color):
     # Define color mappings based on user's input
@@ -80,6 +89,7 @@ def get_text_color(color):
 
     # Default to black if the color is not found in mappings
     return color_mappings.get(color, "black")
+
 
 def create_gui():
     window = tk.Tk()
@@ -105,6 +115,13 @@ def create_gui():
     color_entry = ttk.Entry(window, font=('Helvetica', 12), textvariable=color_var)
     color_entry.pack(pady=10)
 
+    new_quantity_label = ttk.Label(window, text="Enter the new quantity:")
+    new_quantity_label.pack(pady=10)
+
+    new_quantity_var = tk.StringVar()
+    new_quantity_entry = ttk.Entry(window, font=('Helvetica', 12), textvariable=new_quantity_var)
+    new_quantity_entry.pack(pady=10)
+
     result_label = ttk.Label(window, text="", font=('Helvetica', 12))
     result_label.pack(pady=10)
 
@@ -114,10 +131,37 @@ def create_gui():
     lookup_button = ttk.Button(window, text="Lookup Color Total", command=lambda: lookup_color_total(color_entry, result_label, inventory_data))
     lookup_button.pack(pady=10)
 
+    update_button = ttk.Button(window, text="Update Quantity", command=lambda: update_quantity(piece_entry, color_entry, new_quantity_entry, result_label, inventory_data, file_path))
+    update_button.pack(pady=10)
+
     # Start the Tkinter event loop
     window.mainloop()
 
 
+def update_quantity(piece_entry, color_entry, new_quantity_entry, result_label, inventory_data, file_path):
+    selected_piece = piece_entry.get()
+    selected_color = color_entry.get()
+    new_quantity = new_quantity_entry.get()
+
+    # Check if the selected_piece is a valid piece number
+    if not selected_piece.isdigit():
+        result_label.config(text=f"Invalid piece number: {selected_piece}", foreground="red")
+        return
+
+    # Convert the selected_piece and new_quantity to integers
+    selected_piece = int(selected_piece)
+    new_quantity = int(new_quantity)
+
+    # Attempt to update the quantity and save data
+    success = update_and_save_data(selected_piece, selected_color, new_quantity, inventory_data, file_path)
+
+    if success:
+        result_label.config(text=f"Quantity updated for {selected_color} {selected_piece}", foreground="green")
+    else:
+        result_label.config(text=f"Piece {selected_piece} not found in inventory", foreground="red")
+
+
 if __name__ == "__main__":
-    inventory_data = read_inventory_data("C:\\Users\\liam\\Documents\\code\\python\\legoinventory\\inventory_data.txt")
+    file_path = "C:\\Users\\liam\\Documents\\code\\python\\legoinventory\\inventory_data.txt"
+    inventory_data = read_inventory_data(file_path)
     create_gui()
