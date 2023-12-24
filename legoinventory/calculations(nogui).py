@@ -1,6 +1,6 @@
 
 
-file_path = "C:\\Users\\liam\\Documents\\code\\python\\legoinventory\\inventory_data.txt"
+file_path = "inventory_data.txt"
 
 def read_inventory_data(file_path):
     inventory_data = {}

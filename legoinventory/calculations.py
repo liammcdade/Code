@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-file_path = "C:\\Users\\liam\\Documents\\code\\python\\legoinventory\\inventory_data.txt"
+file_path = "inventory_data.txt"
 
 
 def read_inventory_data(file_path):
@@ -63,6 +63,11 @@ def lookup_color_total(color_entry, result_label, inventory_data):
 
     text_color = get_text_color(selected_color)
     result_label.config(text=f"Total quantity of {selected_color} for all pieces: {total}", foreground=text_color)
+
+
+def lookup_all_totals(result_label, inventory_data):
+    total_quantity = sum(sum(piece_data.values()) for piece_data in inventory_data.values())
+    result_label.config(text=f"Total quantity of all pieces and colors: {total_quantity}", foreground="black")
 
 
 def update_color_total(piece_entry, color_entry, new_value_entry, result_label, inventory_data, file_path):
@@ -155,6 +160,9 @@ def create_gui():
 
     update_button = ttk.Button(window, text="Update Color Total", command=lambda: update_color_total(piece_entry, color_entry, new_value_entry, result_label, inventory_data, file_path))
     update_button.pack(pady=10)
+
+    lookup_all_button = ttk.Button(window, text="Lookup All Totals", command=lambda: lookup_all_totals(result_label, inventory_data))
+    lookup_all_button.pack(pady=10)
 
     # Start the Tkinter event loop
     window.mainloop()
