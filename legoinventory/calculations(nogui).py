@@ -58,6 +58,13 @@ def update_color_total(piece, color, new_value, inventory_data, file_path):
     else:
         print(f"Piece {selected_piece} not found in inventory")
 
+def reset_all_pieces(inventory_data):
+    for key in inventory_data:
+        for color in inventory_data[key]:
+            inventory_data[key][color] = 0
+    save_inventory_data(inventory_data, file_path)
+    print("Reset all quantities for all pieces to zero.")
+
 def save_inventory_data(inventory_data, file_path):
     with open(file_path, "w") as file:
         for piece_number, color_quantity in inventory_data.items():
@@ -79,10 +86,11 @@ def main():
         print("\n1. Calculate Total")
         print("2. Lookup Color Total")
         print("3. Update Color Total")
-        print("4. Lookup Total of All Pieces and Colors")
-        print("5. Exit")
+        print("4. Reset All Quantities for All Pieces")
+        print("5. Lookup Total of All Pieces and Colors")
+        print("6. Exit")
 
-        choice = input("Enter your choice (1-5): ")
+        choice = input("Enter your choice (1-6): ")
 
         if choice == "1":
             piece = input("Enter piece number: ")
@@ -97,11 +105,13 @@ def main():
             new_value = int(input("Enter new value: "))
             update_color_total(piece, color, new_value, inventory_data, file_path)
         elif choice == "4":
-            lookup_color_total(inventory_data)
+            reset_all_pieces(inventory_data)
         elif choice == "5":
+            lookup_color_total(inventory_data)
+        elif choice == "6":
             break
         else:
-            print("Invalid choice. Please enter a number between 1 and 5.")
+            print("Invalid choice. Please enter a number between 1 and 6.")
 
 if __name__ == "__main__":
     main()
