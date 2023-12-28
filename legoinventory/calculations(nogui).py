@@ -1,6 +1,9 @@
 
 
+import csv
+
 file_path = "inventory_data.txt"
+csv_file_path = "inventory_data.csv"
 
 def read_inventory_data(file_path):
     inventory_data = {}
@@ -53,7 +56,7 @@ def update_color_total(piece, color, new_value, inventory_data, file_path):
 
     if key in inventory_data:
         inventory_data[key][color.lower()] = new_value
-        save_inventory_data(inventory_data, file_path)
+        save_inventory_data(inventory_data, file_path, csv_file_path)
         print(f"Updated total quantity of {color} for piece {selected_piece}: {new_value}")
     else:
         print(f"Piece {selected_piece} not found in inventory")
@@ -62,14 +65,51 @@ def reset_all_pieces(inventory_data):
     for key in inventory_data:
         for color in inventory_data[key]:
             inventory_data[key][color] = 0
-    save_inventory_data(inventory_data, file_path)
+    save_inventory_data(inventory_data, file_path, csv_file_path)
     print("Reset all quantities for all pieces to zero.")
 
-def save_inventory_data(inventory_data, file_path):
+def save_inventory_data(inventory_data, file_path, csv_file_path=None):
     with open(file_path, "w") as file:
         for piece_number, color_quantity in inventory_data.items():
             for color, quantity in color_quantity.items():
                 file.write(f"{piece_number} {color} {quantity}\n")
+
+def update_csv_from_txt(inventory_data, file_path, csv_file_path):
+    save_inventory_data(inventory_data, file_path, csv_file_path)
+    print(f"CSV file updated with current values from TXT file.")
+
+    if csv_file_path:
+        with open(csv_file_path, "w", newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+
+            # Write the header row
+            header_row = ["Piece Number", "Color", "Quantity"]
+            csv_writer.writerow(header_row)
+
+            # Write the piece data to the CSV file
+            for piece_number, color_quantity in inventory_data.items():
+                for color, quantity in color_quantity.items():
+                    csv_writer.writerow([piece_number, color, quantity])
+
+            # Add an empty row for separation
+            csv_writer.writerow([])
+
+            # Iterate through each piece and calculate the total
+            piece_totals = {}
+            for piece_number, color_quantity in inventory_data.items():
+                piece_total = sum(quantity for quantity in color_quantity.values())
+                piece_totals[piece_number] = piece_total
+
+            # Write the piece totals to the CSV file
+            csv_writer.writerow(["Piece Total"])
+            for piece_number, total_quantity in piece_totals.items():
+                csv_writer.writerow([piece_number, total_quantity])
+
+    print("Piece data and totals added to the CSV file.")
+
+
+
+
 
 def get_text_color(color):
     color_mappings = {
@@ -88,9 +128,10 @@ def main():
         print("3. Update Color Total")
         print("4. Reset All Quantities for All Pieces")
         print("5. Lookup Total of All Pieces and Colors")
-        print("6. Exit")
+        print("6. Update CSV with Current Values from TXT")
+        print("7. Exit")
 
-        choice = input("Enter your choice (1-6): ")
+        choice = input("Enter your choice (1-7): ")
 
         if choice == "1":
             piece = input("Enter piece number: ")
@@ -109,9 +150,11 @@ def main():
         elif choice == "5":
             lookup_color_total(inventory_data)
         elif choice == "6":
+            update_csv_from_txt(inventory_data, file_path, csv_file_path)
+        elif choice == "7":
             break
         else:
-            print("Invalid choice. Please enter a number between 1 and 6.")
+            print("Invalid choice. Please enter a number between 1 and 7.")
 
 if __name__ == "__main__":
     main()
