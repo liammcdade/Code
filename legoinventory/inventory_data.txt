@@ -1,3 +1,45 @@
+1 blue 2
+1 red 2
+1 white 13
+1 yellow 1
+2 blue 2
+2 red 3
+2 white 13
+3 blue 2
+3 red 10
+3 white 3
+3 yellow 4
+5 red 11
+8 blue 14
+8 light_gray 27
+8 red 7
+8 white 14
+14 white 14
+15 black 42
+15 blue 36
+15 red 29
+15 white 16
+15 yellow 8
+17 black 26
+17 blue 39
+17 red 32
+17 white 27
+21 trans_clear 38
+27 red 11
+27 white 5
+27 yellow 2
+29 black 2
+29 red 8
+29 white 5
+29 yellow 7
+31 blue 1
+31 red 17
+31 white 3
+35 red 8
+35 white 2
+
+
+
 2038 dark_pink 590
 2038 light_gray 147
 2038 red 936
@@ -134,6 +176,44 @@
 2357 tan 962
 2357 white 745
 2357 yellow 501
+2376 black 75
+2376 blue 4
+2376 light_gray 4
+2376 red 5
+2376 white 2
+2377 black 21
+2377 blue 2
+2377 brown 1
+2377 dark_bluish_gray 1
+2377 light_bluish_gray 1
+2377 orange 1
+2377 pink 1
+2377 red 10
+2377 white 42
+2377 yellow 2
+2397 black 49
+2397 blue 9
+2397 dark_bluish_gray 29
+2397 dark_red 1
+2397 green 1
+2397 lavender 2
+2397 light_gray 1
+2397 magenta 8
+2397 medium_azure 3
+2397 orange 1
+2397 red 6
+2397 tan 2
+2397 white 1
+2397 yellow 3
+2401 black 9
+2401 blue 1
+2401 light_gray 4
+2401 red 2
+2401 white 4
+2401 yellow 1
+
+
+
 3001 black 187
 3001 blue 892
 3001 bright_light_blue 543
@@ -394,3 +474,47 @@
 3005 trans_yellow 789
 3005 glitter_trans_dark_pink 234
 3005 glitter_trans_purple 567
+3006 black 128
+3006 blue 91
+3006 brown 1
+3006 dark_bluish_gray 2
+3006 dark_gray 2
+3006 dark_orange 1
+3006 dark_red 2
+3006 green 5
+3006 light_bluish_gray 68
+3006 light_gray 29
+3006 red 207
+3006 reddish_brown 33
+3006 tan 28
+3006 white 129
+3006 yellow 80
+3006 trans_clear 1
+
+
+
+
+
+
+14716 black 55
+14716 bright_light_orange 5
+14716 bright_light_yellow 10
+14716 bright_pink 3
+14716 dark_azure 1
+14716 dark_blue 7
+14716 dark_bluish_gray 1
+14716 dark_brown 6
+14716 dark_orange 6
+14716 dark_purple 1
+14716 dark_tan 9
+14716 dark_turquoise 2
+14716 light_bluish_gray 106
+14716 lime 2
+14716 medium_azure 18
+14716 medium_blue 1
+14716 medium_nougat 12
+14716 olive_green 1
+14716 red 34
+14716 reddish_brown 51
+14716 tan 83
+14716 white 149
