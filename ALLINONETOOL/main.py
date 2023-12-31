@@ -1,12 +1,12 @@
 # main_script.py
-from tools.calculations.calculator import calculate_average, perform_calculation
-from tools.general.fileorganizer import organize_files
-from tools.money.crypto_lookup import lookup_crypto_price
-from tools.money.portfolio import load_portfolio, save_portfolio
-from tools.general.qrcodegenerator import generate_qr_code
-from tools.general.weather import get_weather 
-from tools.money.wagecalculator import calculate_income_tax, calculate_nic, calculate_total_deductions, calculate_net_income
-from games.quiz import Quiz, quiz_questions
+from calculator import calculate_average, perform_calculation
+from fileorganizer import organize_files
+from crypto_lookup import lookup_crypto_price
+from portfolio import load_portfolio, save_portfolio
+from qrcodegenerator import generate_qr_code
+from weather import get_weather 
+from wagecalculator import calculate_income_tax, calculate_nic, calculate_total_deductions, calculate_net_income
+from quiz import Quiz, quiz_questions
 
 
 def calculate_wage():
