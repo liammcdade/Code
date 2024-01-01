@@ -33,14 +33,14 @@ def main():
         print("5. Calculate Average")
         print("6. Create a QR Code")
         print("7. Get Weather")
-        print("8. Calculate Wage")
+        print("8. Calculate Wage after tax and NIC")
         print("9. Quiz")
         print("10. unit converter")
         print("11. currency converter")
         print("12. Exit")
 
         # Get user input for the selected tool
-        choice = input("Enter your choice (1-11): ")
+        choice = input("Enter your choice (1-12): ")
 
         # Perform actions based on the user's choice
         if choice == "1":

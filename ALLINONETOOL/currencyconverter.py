@@ -7,8 +7,8 @@ def convert_currency():
     print("Available Currencies:")
     print(", ".join(c.get_rates("").keys()))
 
-    from_currency = input("Enter the source currency code: ").upper()
-    to_currency = input("Enter the target currency code: ").upper()
+    from_currency = input("Enter the currency that you want to convert from: ").upper()
+    to_currency = input("Enter the currency that you want to convert to: ").upper()
 
     amount = float(input(f"Enter the amount in {from_currency}: "))
 
