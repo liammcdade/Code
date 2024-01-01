@@ -7,6 +7,8 @@ from qrcodegenerator import generate_qr_code
 from weather import get_weather 
 from wagecalculator import calculate_income_tax, calculate_nic, calculate_total_deductions, calculate_net_income
 from quiz import Quiz, quiz_questions
+from unitconverter import length_converter, weight_converter, temperature_converter
+from currencyconverter import convert_currency
 
 
 def calculate_wage():
@@ -33,10 +35,12 @@ def main():
         print("7. Get Weather")
         print("8. Calculate Wage")
         print("9. Quiz")
-        print("10. Exit")
+        print("10. unit converter")
+        print("11. currency converter")
+        print("12. Exit")
 
         # Get user input for the selected tool
-        choice = input("Enter your choice (1-10): ")
+        choice = input("Enter your choice (1-11): ")
 
         # Perform actions based on the user's choice
         if choice == "1":
@@ -93,11 +97,44 @@ def main():
             my_quiz = Quiz(quiz_questions)
             my_quiz.run_quiz(num_questions)
         elif choice == "10":
+            # Tool 11: Unit Converter
+            while True:
+                print("\nSelect a category:")
+                print("1. Length Converter")
+                print("2. Weight Converter")
+                print("3. Temperature Converter")
+                print("4. Back to main menu")
+
+                unit_converter_choice = input("Enter your choice (1-4): ")
+
+                if unit_converter_choice == "1":
+                    length_converter()
+                elif unit_converter_choice == "2":
+                    weight_converter()
+                elif unit_converter_choice == "3":
+                    temperature_converter()
+                elif unit_converter_choice == "4":
+                    print("Returning to the main menu.")
+                    break
+                else:
+                    print("Invalid choice. Please enter a number between 1 and 4.")
+        elif choice == "11":
+            # Tool 11: Currency Converter
+            while True:
+                print("1. Currency Converter")
+                
+                currency_converter_choice = "1"
+
+                if currency_converter_choice == "1":
+                    convert_currency()
+                print("Returning to the main menu.")
+                break
+        elif choice == "12":
             # Tool 10: Exit
             print("Exiting the program.")
             break
         else:
-            print("Invalid choice. Please enter a number between 1 and 10.")
+            print("Invalid choice. Please enter a number between 1 and 11.")
 
 if __name__ == "__main__":
     main()
