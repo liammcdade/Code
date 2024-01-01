@@ -4,12 +4,12 @@ from fileorganizer import organize_files
 from crypto_lookup import lookup_crypto_price
 from portfolio import load_portfolio, save_portfolio
 from qrcodegenerator import generate_qr_code
-from weather import get_weather 
-from wagecalculator import calculate_income_tax, calculate_nic, calculate_total_deductions, calculate_net_income
+from weather import get_weather
+from wagecalculator import calculate_net_income
 from quiz import Quiz, quiz_questions
 from unitconverter import length_converter, weight_converter, temperature_converter
-from currencyconverter import convert_currency
-
+from currencyconverter import usd_to_other_currencies, currency_converter, gbp_to_other_currencies, currency_converter_euro
+from englishtospanish import create_translator_spanish, translate_text
 
 def calculate_wage():
     """Calculate net income after tax and NIC."""
@@ -23,6 +23,9 @@ def calculate_wage():
     print(f"Net income after tax and NIC: £{net_income:.2f}")
 
 def main():
+    # Create a translator for English to Spanish
+    english_to_spanish_translator = create_translator_spanish()
+
     while True:
         # Display the main menu
         print("\nSelect a tool:")
@@ -35,12 +38,13 @@ def main():
         print("7. Get Weather")
         print("8. Calculate Wage after tax and NIC")
         print("9. Quiz")
-        print("10. unit converter")
-        print("11. currency converter")
-        print("12. Exit")
+        print("10. Unit Converter")
+        print("11. Currency Converter")
+        print("12. English to Spanish Translator")
+        print("13. Exit")
 
         # Get user input for the selected tool
-        choice = input("Enter your choice (1-12): ")
+        choice = input("Enter your choice (1-13): ")
 
         # Perform actions based on the user's choice
         if choice == "1":
@@ -97,13 +101,13 @@ def main():
             my_quiz = Quiz(quiz_questions)
             my_quiz.run_quiz(num_questions)
         elif choice == "10":
-            # Tool 11: Unit Converter
+            # Tool 10: Unit Converter
             while True:
                 print("\nSelect a category:")
                 print("1. Length Converter")
                 print("2. Weight Converter")
                 print("3. Temperature Converter")
-                print("4. Back to main menu")
+                print("EXIT. Back to the main menu")
 
                 unit_converter_choice = input("Enter your choice (1-4): ")
 
@@ -120,21 +124,41 @@ def main():
                     print("Invalid choice. Please enter a number between 1 and 4.")
         elif choice == "11":
             # Tool 11: Currency Converter
-            while True:
-                print("1. Currency Converter")
-                
-                currency_converter_choice = "1"
+            print("\nSelect a currency conversion option:")
+            print("1. USD to Other Currencies")
+            print("2. GBP to Other Currencies")
+            print("3. Euro to other currencies")
+            print("4. exit. Back to the main menu")
 
-                if currency_converter_choice == "1":
-                    convert_currency()
+            currency_choice = input("Enter your choice (1-4): ")
+
+            if currency_choice == "1":
+                usd_to_other_currencies()
+            elif currency_choice == "2":
+                gbp_to_other_currencies()
+            elif currency_choice == "3":
+                currency_converter_euro()
+
+            elif currency_choice == "4":
                 print("Returning to the main menu.")
-                break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 5.")
         elif choice == "12":
-            # Tool 10: Exit
+            # Tool 12: English to Spanish Translator
+            user_input = input("Enter English text to translate to Spanish (or 'exit' to quit): ")
+
+            if user_input.lower() == 'exit':
+                print("Exiting the translator.")
+                break
+
+            translated_text = translate_text(user_input, english_to_spanish_translator)
+            print("Translated text:", translated_text)
+        elif choice == "13":
+            # Tool 13: Exit
             print("Exiting the program.")
             break
         else:
-            print("Invalid choice. Please enter a number between 1 and 11.")
+            print("Invalid choice. Please enter a number between 1 and 13.")
 
 if __name__ == "__main__":
     main()
