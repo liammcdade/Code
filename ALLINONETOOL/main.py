@@ -10,6 +10,9 @@ from quiz import Quiz, quiz_questions
 from unitconverter import length_converter, weight_converter, temperature_converter
 from currencyconverter import usd_to_other_currencies, currency_converter, gbp_to_other_currencies, currency_converter_euro
 from englishtospanish import create_translator_spanish, translate_text
+from renamer import rename_files_in_folders
+from primenumbers import count_primes_between, get_numbers  # Corrected import names
+import time
 
 def calculate_wage():
     """Calculate net income after tax and NIC."""
@@ -26,6 +29,9 @@ def main():
     # Create a translator for English to Spanish
     english_to_spanish_translator = create_translator_spanish()
 
+    # Initialize the flag for cryptocurrency lookup
+    crypto_lookup_done = False
+
     while True:
         # Display the main menu
         print("\nSelect a tool:")
@@ -41,39 +47,51 @@ def main():
         print("10. Unit Converter")
         print("11. Currency Converter")
         print("12. English to Spanish Translator")
-        print("13. Exit")
+        print("13. Rename Files in Folders")
+        print("14. Find Prime Numbers in a Range")
+        print("15. Exit")
 
         # Get user input for the selected tool
-        choice = input("Enter your choice (1-13): ")
+        choice = input("Enter your choice (1-15): ")
+
+        # Ensure the input is within the valid range
+        if choice.isdigit() and 1 <= int(choice) <= 15:
+            choice = int(choice)
+        else:
+            print("Invalid choice. Please enter a number between 1 and 15.")
+            continue
 
         # Perform actions based on the user's choice
-        if choice == "1":
+        if choice == 1:
             # Tool 1: Organize Files by Extension
             source_folder = input("Enter the source folder path: ")
             destination_folder = input("Enter the destination folder path: ")
             organize_files(source_folder, destination_folder)
             print("Files organized successfully.")
-        elif choice == "2":
+        elif choice == 2:
             # Tool 2: Calculator
             result = perform_calculation()
             print(f"Result: {result}")
-        elif choice == "3":
+        elif choice == 3:
             # Tool 3: Cryptocurrencies Lookup
-            while True:
-                symbol = input("Enter the cryptocurrency symbol (e.g., BTC-USD): ").upper()
+            symbol = input("Enter the cryptocurrency symbol (e.g., bitcoin): ").upper()
 
-                if symbol == "EXIT":
-                    print("Exiting cryptocurrency lookup.")
-                    break
+            if symbol == "EXIT":
+                print("Exiting cryptocurrency lookup.")
+                break
 
+            if not crypto_lookup_done:
                 print(lookup_crypto_price(symbol))
-        elif choice == "4":
+                crypto_lookup_done = True
+            else:
+                print("Cryptocurrency lookup already performed in this session.")
+        elif choice == 4:
             # Tool 4: Portfolio Tracker
             portfolio = load_portfolio()
             # Call functions related to portfolio management here
             save_portfolio(portfolio)
             print("Returning to the main menu.")
-        elif choice == "5":
+        elif choice == 5:
             # Tool 5: Calculate Average
             # Example usage for calculating the average
             numbers = [float(x) for x in input("Enter numbers separated by space: ").split()]
@@ -83,24 +101,24 @@ def main():
                 print(f"The average is: {result}")
             else:
                 print("Please enter at least one number.")
-        elif choice == "6":
+        elif choice == 6:
             # Tool 6: Create a QR Code
             website_url = input("Enter the website URL for the QR code (full address only): ")
             qr_code_file_path = "qr_code.png"
             generate_qr_code(website_url, qr_code_file_path)
             print(f"QR code generated and saved to {qr_code_file_path}")
-        elif choice == "7":
+        elif choice == 7:
             # Tool 7: Get Weather
             city = input("Enter the city for weather information: ")
             get_weather(city)
-        elif choice == "8":
+        elif choice == 8:
             # Tool 8: Calculate Wage
             calculate_wage()
-        elif choice == "9":
+        elif choice == 9:
             num_questions = int(input("How many questions would you like to answer (1 - 100)?"))
             my_quiz = Quiz(quiz_questions)
             my_quiz.run_quiz(num_questions)
-        elif choice == "10":
+        elif choice == 10:
             # Tool 10: Unit Converter
             while True:
                 print("\nSelect a category:")
@@ -122,7 +140,7 @@ def main():
                     break
                 else:
                     print("Invalid choice. Please enter a number between 1 and 4.")
-        elif choice == "11":
+        elif choice == 11:
             # Tool 11: Currency Converter
             print("\nSelect a currency conversion option:")
             print("1. USD to Other Currencies")
@@ -143,7 +161,7 @@ def main():
                 print("Returning to the main menu.")
             else:
                 print("Invalid choice. Please enter a number between 1 and 5.")
-        elif choice == "12":
+        elif choice == 12:
             # Tool 12: English to Spanish Translator
             user_input = input("Enter English text to translate to Spanish (or 'exit' to quit): ")
 
@@ -153,12 +171,28 @@ def main():
 
             translated_text = translate_text(user_input, english_to_spanish_translator)
             print("Translated text:", translated_text)
-        elif choice == "13":
-            # Tool 13: Exit
-            print("Exiting the program.")
+        elif choice == 13:
+            # Tool 13: Rename Files in Folders
+            root_folder = input("Enter the root folder path: ")
+            rename_files_in_folders(root_folder)
+            print("Files renamed successfully.")
+        elif choice == 14:
+            # Tool 14: Find Prime Numbers in a Range
+            start_num, end_num = get_numbers()  # Call the function to get user input
+
+            start_time = time.time()
+            result = count_primes_between(start_num, end_num)
+            end_time = time.time()
+
+            print("Number of prime numbers between", start_num, "and", end_num, "is:", result)
+            print("Time taken:", end_time - start_time, "seconds")
+        elif choice == 15:
+            print("Exiting the program. Goodbye!")
             break
         else:
-            print("Invalid choice. Please enter a number between 1 and 13.")
+            print("Invalid choice. Please enter a number between 1 and 15.")
 
 if __name__ == "__main__":
     main()
+
+
