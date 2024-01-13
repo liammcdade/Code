@@ -1,60 +1,84 @@
-# main_script.py
-import time
-import tkinter as tk
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.screenmanager import ScreenManager, Screen
 import os
 import shutil
-import subprocess
-import self 
-import requests 
+import requests
 
-class Application(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.title("Toolbox Application")
-        self.geometry("600x400")
+class ToolScreen(Screen):
+    def __init__(self, tool_name, **kwargs):
+        super(ToolScreen, self).__init__(**kwargs)
+        self.tool_name = tool_name
+        self.source_folder_entry = None
+        self.destination_folder_entry = None
+        self.calculation_entry = None
+        self.symbol_entry = None
+        self.result_label = None
+        self.back_button = Button(text="Back", on_press=self.go_back)
+        
+        # Create a vertical box layout to hold the widgets
+        self.layout = BoxLayout(orientation='vertical')
+        self.add_widget(self.layout)
 
-        self.crypto_lookup_done = False
+    def on_enter(self):
+        self.layout.clear_widgets()
+        if  self.tool_name == "Organize Files by Extension":
+            self.layout.add_widget(Label(text="Source Folder:"))
+            self.source_folder_entry = TextInput()
+            self.layout.add_widget(self.source_folder_entry)
 
-        self.create_widgets()
+            self.layout.add_widget(Label(text="Destination Folder:"))
+            self.destination_folder_entry = TextInput()
+            self.layout.add_widget(self.destination_folder_entry)
 
-    def create_widgets(self):
-        # Create a label for the main menu
-        label = tk.Label(self, text="Select a tool:")
-        label.pack(pady=10)
+            self.result_label = Label(text="")
+            self.layout.add_widget(self.result_label)
 
-        # Create buttons for each tool
-        tools = [
-            ("Organize Files by Extension", self.organize_files_tool),
-            ("Calculator", self.calculator_tool),
-            ("Cryptocurrencies Lookup", self.crypto_lookup_tool),
-            ("Calculate Average", self.calculate_average_tool),
-            ("Create a QR Code", self.qr_code_tool),
-            ("Get Weather", self.weather_tool),
-            ("Calculate Wage after tax and NIC", self.calculate_wage_tool),
-            ("Quiz", self.quiz_tool),
-            ("Unit Converter", self.unit_converter_tool),
-            ("Currency Converter", self.currency_converter_tool),
-            ("English to Spanish Translator", self.translator_tool),
-            ("Rename Files in Folders", self.rename_files_tool),
-            ("Find Prime Numbers in a Range", self.prime_numbers_tool),
-            ("Exit", self.exit_tool),
-        ]
+            submit_button = Button(text="Submit", on_press=self.organize_files)
+            self.layout.add_widget(submit_button)
 
-        for text, command in tools:
-            btn = tk.Button(self, text=text, command=command)
-            btn.pack()
+            self.layout.add_widget(self.back_button)
 
-    def organize_files_tool(self):
-        source_folder_entry = tk.Entry(self)
-        destination_folder_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: self.organize_files(
-            source_folder_entry.get(), destination_folder_entry.get()))
+        elif self.tool_name == "Calculator":
+            self.calculation_entry = TextInput()
+            self.layout.add_widget(self.calculation_entry)
 
-        source_folder_entry.grid(row=0, column=0, columnspan=2)
-        destination_folder_entry.grid(row=1, column=0, columnspan=2)
-        submit_button.grid(row=2, column=0, columnspan=2)
+            self.result_label = Label(text="")
+            self.layout.add_widget(self.result_label)
 
-    def organize_files(self, source_folder, destination_folder):
+            submit_button = Button(text="Submit", on_press=self.perform_calculation)
+            self.layout.add_widget(submit_button)
+
+            self.layout.add_widget(self.back_button)
+
+        elif self.tool_name == "Cryptocurrencies Lookup":
+            self.symbol_entry = TextInput()
+            self.layout.add_widget(self.symbol_entry)
+
+            self.result_label = Label(text="")
+            self.layout.add_widget(self.result_label)
+
+            submit_button = Button(text="Submit", on_press=self.perform_crypto_lookup)
+            self.layout.add_widget(submit_button)
+            self.layout.add_widget(self.back_button)
+
+    def on_leave(self):
+        self.layout.clear_widgets()
+
+    def go_back(self, instance):
+        self.manager.current = "main_menu"
+
+    def organize_files(self, instance):
+        source_folder = self.source_folder_entry.text
+        destination_folder = self.destination_folder_entry.text
+
+        if not source_folder or not destination_folder:
+            self.result_label.text = "Please provide both source and destination folders."
+            return
+
         for root, _, files in os.walk(source_folder):
             for file in files:
                 file_path = os.path.join(root, file)
@@ -69,189 +93,87 @@ class Application(tk.Tk):
                     new_file_path = os.path.join(destination_folder_path, file)
                     shutil.move(file_path, new_file_path)
 
-    def calculator_tool(self):
-        calculation_entry = tk.Entry(self)
-        result_label = tk.Label(self, text="")
-        submit_button = tk.Button(self, text="Submit", command=lambda: self.perform_calculation(calculation_entry.get(), result_label))
+        self.result_label.text = "Files organized successfully."
 
-        calculation_entry.pack()
-        submit_button.pack()
-        result_label.pack()
-
-    def perform_calculation(self, user_input, result_label):
+    def perform_calculation(self, instance):
         try:
-            number1, operation, number2 = map(str.strip, user_input.split())
-            number1, number2 = float(number1), float(number2)
-
-            if operation == '+':
-                result = number1 + number2
-            elif operation == '-':
-                result = number1 - number2
-            elif operation == '*':
-                result = number1 * number2
-            elif operation == '/':
-                if number2 == 0:
-                    result_label.config(text="Error: Division by zero")
-                    return
-                result = number1 / number2
-            else:
-                result_label.config(text="Error: Invalid operation")
-                return
-
-            result_label.config(text=f"Result: {result}")
-        except ValueError as ve:
-            result_label.config(text=f"Error: {ve}")
+            user_input = self.calculation_entry.text
+            result = eval(user_input)  # Use eval to evaluate the expression
+            self.result_label.text = f"Result: {result}"
         except Exception as e:
-            result_label.config(text=f"Error: {e}")
-
-    def calculator_tool(self):
-        calculation_entry = tk.Entry(self)
-        result_label = tk.Label(self, text="")
-        submit_button = tk.Button(self, text="Submit", command=lambda: self.perform_calculation(calculation_entry.get(), result_label))
-
-    # Pack the GUI elements into a grid
-        submit_button.pack()(row=0, column=0, columnspan=2)
-        result_label.pack()(row=1, column=0, columnspan=2)
-        calculation_entry.pack()(row=2, column=0, columnspan=2)
-
-    def crypto_lookup_tool(self):
-        # Add a text box for the user to enter the cryptocurrency symbol
-        symbol_entry = tk.Entry(self)
-        result_label = tk.Label(self, text="")  # Add a label to display the result
-        submit_button = tk.Button(self, text="Submit", command=lambda: self.perform_crypto_lookup(symbol_entry.get(), result_label))
-
-        # Pack the GUI elements into a grid
-        symbol_entry.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
-        result_label.grid(row=2, column=0, columnspan=2)
-
-    def perform_crypto_lookup(self, symbol, result_label):
-        result = lookup_crypto_price(symbol)  # Call the lookup_crypto_price function
-        result_label.config(text=result)  # Update the result label with the fetched result
+            self.result_label.text = f"Error: {e}"
 
 
+    def perform_crypto_lookup(self, instance):
+        symbol = self.symbol_entry.text
+        result = self.lookup_crypto_price(symbol)
+        self.result_label.text = result
 
-    def calculate_average_tool(self):
-        # Add a text box for the user to enter the numbers
-        numbers_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: calculate_average([float(x) for x in numbers_entry.get().split()]))
 
-        # Pack the GUI elements into a grid
-        numbers_entry.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
+    def lookup_crypto_price(self, symbol):
+        try:
+            # Define the CoinGecko API endpoint
+            api_endpoint = "https://api.coingecko.com/api/v3/simple/price"
 
-    def qr_code_tool(self):
-        # Add a text box for the user to enter the website URL
-        website_url_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: generate_qr_code(website_url_entry.get(), "qr_code.png"))
+            # Specify the parameters for the API request
+            params = {
+                'ids': symbol.lower(),
+                'vs_currencies': 'usd',
+            }
 
-        # Pack the GUI elements into a grid
-        website_url_entry.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
+            # Make the API request
+            response = requests.get(api_endpoint, params=params)
+            data = response.json()
 
-    def weather_tool(self):
-        # Add a text box for the user to enter the city
-        city_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: get_weather(city_entry.get()))
+            # Extract the last price from the response
+            last_price = data.get(symbol.lower(), {}).get('usd')
 
-        # Pack the GUI elements into a grid
-        city_entry.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
+            if last_price is not None:
+                return f"Last price for {symbol}: {last_price} USD"
+            else:
+                return f"Unable to fetch price for {symbol}"
 
-    def calculate_wage_tool(self):
-        # Add a text box for the user to enter the annual income
-        income_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: calculate_net_income(float(income_entry.get())))
+        except Exception as e:
+            return f"Error: {e}"
+class MainApp(App):
+    def build(self):
+        self.screen_manager = ScreenManager()
 
-        # Pack the GUI elements into a grid
-        income_entry.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
+        main_menu = Screen(name="main_menu")
+        main_menu.add_widget(self.create_main_menu_widgets())
+        self.screen_manager.add_widget(main_menu)
 
-    def quiz_tool(self):
-        # Add a slider for the user to select the number of questions
-        num_questions_slider = tk.Scale(self, from_=1, to=100, orient=tk.HORIZONTAL)
-        submit_button = tk.Button(self, text="Submit", command=lambda: Quiz(quiz_questions).run_quiz(num_questions_slider.get()))
+        tools = [
+            ("Organize Files by Extension", ToolScreen(tool_name="Organize Files by Extension", name="organize_files")),
+            ("Calculator", ToolScreen(tool_name="Calculator", name="calculator")),
+            ("Cryptocurrencies Lookup", ToolScreen(tool_name="Cryptocurrencies Lookup", name="crypto_lookup")),
+        ]
 
-        # Pack the GUI elements into a grid
-        num_questions_slider.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
+        for text, tool_screen in tools:
+            self.screen_manager.add_widget(tool_screen)
 
-    def unit_converter_tool(self):
-        # Add a button for each unit conversion function
-        length_entry = tk.Entry(self)
-        weight_entry = tk.Entry(self)
-        temperature_entry = tk.Entry(self)
+        return self.screen_manager
 
-        length_button = tk.Button(self, text="Length", command=lambda: length_converter(length_entry.get()))
-        weight_button = tk.Button(self, text="Weight", command=lambda: weight_converter(weight_entry.get()))
-        temperature_button = tk.Button(self, text="Temperature", command=lambda: temperature_converter(temperature_entry.get()))
+    def create_main_menu_widgets(self):
+        main_menu_layout = BoxLayout(orientation="vertical")
+        label = Label(text="Select a tool:")
+        main_menu_layout.add_widget(label)
 
-        # Pack the GUI elements into a grid
-        length_entry.grid(row=0, column=0)
-        weight_entry.grid(row=0, column=1)
-        temperature_entry.grid(row=0, column=2)
+        tools = [
+            ("Organize Files by Extension", "organize_files"),
+            ("Calculator", "calculator"),
+            ("Cryptocurrencies Lookup", "crypto_lookup"),
+        ]
 
-        length_button.grid(row=1, column=0)
-        weight_button.grid(row=1, column=1)
-        temperature_button.grid(row=1, column=2)
+        for text, tool_name in tools:
+            btn = Button(text=text, on_press=lambda instance, tn=tool_name: self.show_tool(tn))
+            main_menu_layout.add_widget(btn)
 
-    def currency_converter_tool(self):
-        # Add entry boxes for currency conversion
-        usd_from_entry = tk.Entry(self)
-        usd_to_entry = tk.Entry(self)
-        gbp_from_entry = tk.Entry(self)
-        gbp_to_entry = tk.Entry(self)
-        euro_from_entry = tk.Entry(self)
-        euro_to_entry = tk.Entry(self)
+        return main_menu_layout
 
-        usd_to_other_currencies_button = tk.Button(self, text="USD to Other Currencies", command=lambda: usd_to_other_currencies(usd_from_entry.get(), "USD", usd_to_entry.get()))
-        gbp_to_other_currencies_button = tk.Button(self, text="GBP to Other Currencies", command=lambda: gbp_to_other_currencies(gbp_from_entry.get(), "GBP", gbp_to_entry.get()))
-        euro_to_other_currencies_button = tk.Button(self, text="EUR to Other Currencies", command=lambda: currency_converter_euro(euro_from_entry.get(), "EUR", euro_to_entry.get()))
+    def show_tool(self, tool_name):
+        self.screen_manager.current = tool_name
 
-        # Pack the GUI elements into a grid
-        usd_from_entry.grid(row=0, column=0)
-        usd_to_entry.grid(row=0, column=1)
-        gbp_from_entry.grid(row=1, column=0)
-        gbp_to_entry.grid(row=1, column=1)
-        euro_from_entry.grid(row=2, column=0)
-        euro_to_entry.grid(row=2, column=1)
-
-        usd_to_other_currencies_button.grid(row=0, column=2)
-        gbp_to_other_currencies_button.grid(row=1, column=2)
-        euro_to_other_currencies_button.grid(row=2, column=2)
-
-    def translator_tool(self):
-        # Add a text box for the user to enter the English text
-        english_text_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: translate_text(english_text_entry.get(), self.english_to_spanish_translator))
-
-        # Pack the GUI elements into a grid
-        english_text_entry.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
-
-    def rename_files_tool(self):
-        # Add a text box for the user to enter the folder path
-        folder_path_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: rename_files_in_folders(folder_path_entry.get()))
-
-        # Pack the GUI elements into a grid
-        folder_path_entry.grid(row=0, column=0, columnspan=2)
-        submit_button.grid(row=1, column=0, columnspan=2)
-
-    def prime_numbers_tool(self):
-        # Add text boxes for the user to enter the range of prime numbers
-        start_entry = tk.Entry(self)
-        end_entry = tk.Entry(self)
-        submit_button = tk.Button(self, text="Submit", command=lambda: count_primes_between(int(start_entry.get()), int(end_entry.get())))
-
-        # Pack the GUI elements into a grid
-        start_entry.grid(row=0, column=0)
-        end_entry.grid(row=0, column=1)
-        submit_button.grid(row=1, column=0, columnspan=2)
-
-    def exit_tool(self):
-        self.destroy()
 
 if __name__ == "__main__":
-    app = Application()
-    app.mainloop()
+    MainApp().run()
