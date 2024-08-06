@@ -13,6 +13,9 @@ from language.englishtospanish import create_translator_spanish, translate_text
 from files_based.renamer import rename_files_in_folders
 from miscellaneous.primenumbers import count_primes_between, get_numbers  # Corrected import names
 import time
+from system.system import get_system_info, system_main
+from miscellaneous.deletepycache import removefolders, main, DEFAULT_BASE_DIRECTORY
+import os
 
 def calculate_wage():
     """Calculate net income after tax and NIC."""
@@ -49,16 +52,18 @@ def main():
         print("12. English to Spanish Translator")
         print("13. Rename Files in Folders")
         print("14. Find Prime Numbers in a Range")
-        print("15. Exit")
+        print("15. system infromation")
+        print("16. Clean up")
+        print("17. exit")
 
         # Get user input for the selected tool
-        choice = input("Enter your choice (1-15): ")
+        choice = input("Enter your choice (1-17): ")
 
         # Ensure the input is within the valid range
-        if choice.isdigit() and 1 <= int(choice) <= 15:
+        if choice.isdigit() and 1 <= int(choice) <= 17:
             choice = int(choice)
         else:
-            print("Invalid choice. Please enter a number between 1 and 15.")
+            print("Invalid choice. Please enter a number between 1 and 17.")
             continue
 
         # Perform actions based on the user's choice
@@ -187,7 +192,15 @@ def main():
             print("Number of prime numbers between", start_num, "and", end_num, "is:", result)
             print("Time taken:", end_time - start_time, "seconds")
         elif choice == 15:
-            print("Exiting the program. Goodbye!")
+            get_system_info()
+            system_main()   
+        elif choice == 16:
+            print("Exiting the program Goodbye!")
+
+            
+            removefolders(base_directory=DEFAULT_BASE_DIRECTORY)
+            
+        elif choice == 17:
             break
         else:
             print("Invalid choice. Please enter a number between 1 and 15.")
