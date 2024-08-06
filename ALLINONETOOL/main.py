@@ -1,17 +1,17 @@
 # main_script.py
-from calculator import calculate_average, perform_calculation
-from fileorganizer import organize_files
-from crypto_lookup import lookup_crypto_price
-from portfolio import load_portfolio, save_portfolio
-from qrcodegenerator import generate_qr_code
-from weather import get_weather
-from wagecalculator import calculate_net_income
-from quiz import Quiz, quiz_questions
-from unitconverter import length_converter, weight_converter, temperature_converter
-from currencyconverter import usd_to_other_currencies, currency_converter, gbp_to_other_currencies, currency_converter_euro
-from englishtospanish import create_translator_spanish, translate_text
-from renamer import rename_files_in_folders
-from primenumbers import count_primes_between, get_numbers  # Corrected import names
+from calculators.calculator import calculate_average, perform_calculation
+from files_based.fileorganizer import organize_files
+from Crypto.crypto_lookup import lookup_crypto_price
+from miscellaneous.portfolio import load_portfolio, save_portfolio
+from miscellaneous.qrcodegenerator import generate_qr_code
+from miscellaneous.weather import get_weather
+from calculators.wagecalculator import calculate_net_income
+from miscellaneous.quiz import Quiz, quiz_questions
+from calculators.unitconverter import length_converter, weight_converter, temperature_converter
+from calculators.currencyconverter import usd_to_other_currencies, currency_converter, gbp_to_other_currencies, currency_converter_euro
+from language.englishtospanish import create_translator_spanish, translate_text
+from files_based.renamer import rename_files_in_folders
+from miscellaneous.primenumbers import count_primes_between, get_numbers  # Corrected import names
 import time
 
 def calculate_wage():
