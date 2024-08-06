@@ -50,7 +50,7 @@ Describe your project
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Feature 1;\
+:heavy_check_mark: calculator;\
 :heavy_check_mark: Feature 2;\
 :heavy_check_mark: Feature 3;
 
@@ -58,11 +58,7 @@ Describe your project
 
 The following tools were used in this project:
 
-- [Expo](https://expo.io/)
-- [Node.js](https://nodejs.org/en/)
-- [React](https://pt-br.reactjs.org/)
-- [React Native](https://reactnative.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
+python
 
 ## :white_check_mark: Requirements ##
 
@@ -72,16 +68,9 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 
 ```bash
 # Clone this project
-$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/python
+$ git clone https://github.com/liammcdade/code
 
-# Access
-$ cd python
 
-# Install dependencies
-$ yarn
-
-# Run the project
-$ yarn start
 
 # The server will initialize in the <http://localhost:3000>
 ```
