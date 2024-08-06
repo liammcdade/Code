@@ -1,4 +1,5 @@
 # main_script.py
+# Importing necessary functions and classes from various modules
 from calculators.calculator import calculate_average, perform_calculation
 from files_based.fileorganizer import organize_files
 from Crypto.crypto_lookup import lookup_crypto_price
@@ -15,25 +16,35 @@ from miscellaneous.primenumbers import count_primes_between, get_numbers  # Corr
 import time
 
 def calculate_wage():
-    """Calculate net income after tax and NIC."""
+    """
+    Function to calculate the net income after tax and National Insurance Contributions (NIC).
+    Prompts the user to enter their annual income and displays the calculated net income.
+    """
     try:
+        # Prompt user for their annual income and convert it to a float
         annual_income = float(input("Enter annual income: £"))
     except ValueError:
+        # Handle invalid input if the entered value is not a number
         print("Invalid input. Please enter a valid annual income.")
         return
 
+    # Calculate net income using the imported function
     net_income = calculate_net_income(annual_income)
+    # Display the result to the user
     print(f"Net income after tax and NIC: £{net_income:.2f}")
 
 def main():
+    """
+    Main function to provide a menu-based interface for the user to select and use various tools.
+    """
     # Create a translator for English to Spanish
     english_to_spanish_translator = create_translator_spanish()
 
-    # Initialize the flag for cryptocurrency lookup
+    # Initialize the flag for cryptocurrency lookup to track if it has been done
     crypto_lookup_done = False
 
     while True:
-        # Display the main menu
+        # Display the main menu options to the user
         print("\nSelect a tool:")
         print("1. Organize Files by Extension")
         print("2. Calculator")
@@ -54,7 +65,7 @@ def main():
         # Get user input for the selected tool
         choice = input("Enter your choice (1-15): ")
 
-        # Ensure the input is within the valid range
+        # Validate if the input is a digit and within the valid range
         if choice.isdigit() and 1 <= int(choice) <= 15:
             choice = int(choice)
         else:
@@ -80,6 +91,7 @@ def main():
                 print("Exiting cryptocurrency lookup.")
                 break
 
+            # Check if cryptocurrency lookup has been done already in the session
             if not crypto_lookup_done:
                 print(lookup_crypto_price(symbol))
                 crypto_lookup_done = True
@@ -88,12 +100,12 @@ def main():
         elif choice == 4:
             # Tool 4: Portfolio Tracker
             portfolio = load_portfolio()
-            # Call functions related to portfolio management here
+            # Call functions related to portfolio management (e.g., updating, analyzing) here
             save_portfolio(portfolio)
             print("Returning to the main menu.")
         elif choice == 5:
             # Tool 5: Calculate Average
-            # Example usage for calculating the average
+            # Prompt user to enter numbers separated by space
             numbers = [float(x) for x in input("Enter numbers separated by space: ").split()]
             result = calculate_average(numbers)
 
@@ -115,17 +127,19 @@ def main():
             # Tool 8: Calculate Wage
             calculate_wage()
         elif choice == 9:
+            # Tool 9: Quiz
             num_questions = int(input("How many questions would you like to answer (1 - 100)?"))
             my_quiz = Quiz(quiz_questions)
             my_quiz.run_quiz(num_questions)
         elif choice == 10:
             # Tool 10: Unit Converter
             while True:
+                # Display unit converter menu
                 print("\nSelect a category:")
                 print("1. Length Converter")
                 print("2. Weight Converter")
                 print("3. Temperature Converter")
-                print("EXIT. Back to the main menu")
+                print("4. Exit to the main menu")
 
                 unit_converter_choice = input("Enter your choice (1-4): ")
 
@@ -145,8 +159,8 @@ def main():
             print("\nSelect a currency conversion option:")
             print("1. USD to Other Currencies")
             print("2. GBP to Other Currencies")
-            print("3. Euro to other currencies")
-            print("4. exit. Back to the main menu")
+            print("3. Euro to Other Currencies")
+            print("4. Exit to the main menu")
 
             currency_choice = input("Enter your choice (1-4): ")
 
@@ -156,11 +170,10 @@ def main():
                 gbp_to_other_currencies()
             elif currency_choice == "3":
                 currency_converter_euro()
-
             elif currency_choice == "4":
                 print("Returning to the main menu.")
             else:
-                print("Invalid choice. Please enter a number between 1 and 5.")
+                print("Invalid choice. Please enter a number between 1 and 4.")
         elif choice == 12:
             # Tool 12: English to Spanish Translator
             user_input = input("Enter English text to translate to Spanish (or 'exit' to quit): ")
@@ -178,8 +191,9 @@ def main():
             print("Files renamed successfully.")
         elif choice == 14:
             # Tool 14: Find Prime Numbers in a Range
-            start_num, end_num = get_numbers()  # Call the function to get user input
+            start_num, end_num = get_numbers()  # Get the range of numbers from the user
 
+            # Measure the time taken to calculate prime numbers
             start_time = time.time()
             result = count_primes_between(start_num, end_num)
             end_time = time.time()
@@ -187,11 +201,13 @@ def main():
             print("Number of prime numbers between", start_num, "and", end_num, "is:", result)
             print("Time taken:", end_time - start_time, "seconds")
         elif choice == 15:
+            # Tool 15: Exit the program
             print("Exiting the program. Goodbye!")
             break
-        else:          
+        else:
+            # Handle invalid choice that is not in the range 1-15
             print("Invalid choice. Please enter a number between 1 and 15.")
 
 if __name__ == "__main__":
+    # Entry point of the script
     main()
-
