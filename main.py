@@ -53,17 +53,17 @@ def main():
         print("13. Rename Files in Folders")
         print("14. Find Prime Numbers in a Range")
         print("15. system infromation")
-        print("16. Clean up")
-        print("17. exit")
+        print("16. exit")
+        
 
         # Get user input for the selected tool
-        choice = input("Enter your choice (1-17): ")
+        choice = input("Enter your choice (1-16): ")
 
         # Ensure the input is within the valid range
-        if choice.isdigit() and 1 <= int(choice) <= 17:
+        if choice.isdigit() and 1 <= int(choice) <= 16:
             choice = int(choice)
         else:
-            print("Invalid choice. Please enter a number between 1 and 17.")
+            print("Invalid choice. Please enter a number between 1 and 16.")
             continue
 
         # Perform actions based on the user's choice
@@ -193,16 +193,13 @@ def main():
         elif choice == 15:
             get_system_info()
             system_main()   
+           
         elif choice == 16:
-            print("Exiting the program Goodbye!")
-
-            
+            print("exiting the program!!")
             removefolders(base_directory=DEFAULT_BASE_DIRECTORY)
-            
-        elif choice == 17:
             break
         else:
-            print("Invalid choice. Please enter a number between 1 and 15.")
+            print("Invalid choice. Please enter a number between 1 and 16.")
 
 if __name__ == "__main__":
     main()
