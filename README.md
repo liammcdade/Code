@@ -51,8 +51,8 @@ Describe your project
 ## :sparkles: Features ##
 
 :heavy_check_mark: calculator;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+:heavy_check_mark: english to spanish and spanish to english translator;\
+:heavy_check_mark: file organiser and renamer;
 
 ## :rocket: Technologies ##
 
