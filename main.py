@@ -13,11 +13,8 @@ from calculators.currencyconverter import usd_to_other_currencies, currency_conv
 from language.englishtospanish import create_translator_spanish, translate_text
 from files_based.renamer import rename_files_in_folders
 from miscellaneous.primenumbers import count_primes_between, get_numbers  # Corrected import names
-import time
 from system.system import get_system_info, system_main
 from miscellaneous.deletepycache import removefolders, main, DEFAULT_BASE_DIRECTORY
-import os
-import subprocess
 
 
 def calculate_wage():
